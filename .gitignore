@@ -1,6 +1,7 @@
 # Gerado pela compilação
 build/
 *.apk
+*.zip
 *.dex
 *.class
 
@@ -11,7 +12,10 @@ build/
 
 # Valores de aparelhos (backups da limpeza)
 backup/
-**/dist/backups/
+backups/
+
+# Ferramentas ADB baixadas pelos instaladores
+platform-tools/
 
 # macOS
 .DS_Store

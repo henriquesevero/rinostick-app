@@ -1,0 +1,5 @@
+# Instaladores de Windows precisam de quebra de linha CRLF
+*.bat text eol=crlf
+# Instaladores de Mac precisam de LF
+*.command text eol=lf
+*.sh text eol=lf

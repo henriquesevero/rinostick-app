@@ -48,7 +48,12 @@ O Fire OS **não deixa** trocar o launcher padrão: o HOME sempre abre `com.amaz
 | Acessibilidade | ver seção 2 | Botão Home → tela nova |
 | Ouvinte de notificações | `adb shell cmd notification allow_listener com.rinostick.app/com.rinostick.app.NowPlayingListener` | Ler sessões de mídia ("Tocando agora") |
 
-O `build.sh install` e o `dist/instalar.sh` já fazem tudo isso. **Sem computador:** o assistente do app (`Setup`) faz o mesmo pelo ADB do próprio aparelho; o usuário só liga a Depuração ADB e aceita "Permitir depuração" na TV. Instalação só pelo Fire Stick: app Downloader + link do APK (veja `dist/instalar-sem-computador/COMO-INSTALAR.md`). Num reset de fábrica, as permissões somem: reinstale e rode o assistente (ou `instalar.sh`).
+O `build.sh install` e os instaladores do kit (`dist/kit-de-instalacao/instalar-mac.command` e `instalar-windows.bat`) já fazem tudo isso.
+
+**O Fire OS 8.1.x bloqueia a configuração pelo próprio aparelho** (testado em 24/11/2026 nos dois Fire TV do dono, Fire OS 8.1.8.5): o adbd aceita conexões TCP vindas do próprio aparelho (127.0.0.1 ou o próprio IP), mas não responde nada e nem registra no log; o app recebe "broken pipe". Conexões de **outro** aparelho da rede funcionam normalmente. Por isso:
+- a instalação de outras pessoas é **sempre por computador** (Mac ou Windows), com o kit (`dist/kit-de-instalacao/`, guia `COMO-INSTALAR.md`);
+- o assistente `Setup` só explica isso e mostra o IP da TV (`Device.localIp()`); a opção "Tentar configurar aqui mesmo" mantém o `AdbSelf` para Fire OS antigos;
+- ideia aceita para o futuro, se pedirem: um "configurador" num celular Android (o mesmo `AdbSelf`, apontando para o IP da TV). Não funciona para quem só tem iPhone.
 
 ---
 
@@ -67,7 +72,7 @@ O `build.sh install` e o `dist/instalar.sh` já fazem tudo isso. **Sem computado
 | `Weather.java` | Clima (detalhes abaixo) |
 | `Device.java` | Ações de sistema (detalhes abaixo) |
 | `HomeRedirectService.java` | Redirecionamento do HOME (seção 2) |
-| `AdbSelf.java` | Cliente ADB mínimo que conecta no adbd do **próprio** aparelho (127.0.0.1:5555, chave RSA própria em `files/adbkey`). Permite configurar sem computador |
+| `AdbSelf.java` | Cliente ADB mínimo que conecta no adbd do **próprio** aparelho (127.0.0.1:5555, chave RSA própria em `files/adbkey`). No Fire OS 8.1.x atual **não funciona** (veja a seção 3); fica para Fire OS antigos |
 | `Setup.java` | Assistente "Configurar o RinoStick": via `AdbSelf`, faz o `pm grant`, liga a acessibilidade e o ouvinte de notificações e, opcionalmente, a limpeza (backup em prefs `cleanBackup`/`cleanDisabled`). Abre sozinho se faltar permissão; também fica em Ajustes → Fire TV |
 | `Screensaver.java` + `AuroraView.java` | Protetor de tela `DreamService` "Aurora": aurora animada em baixa resolução + relógio |
 
@@ -132,7 +137,7 @@ Requisitos no Mac:
 
 ```
 cd ~/Documents/2 - workspace/rinostick-app/versao-fire-stick-amazon
-./build.sh            # só compila  -> build/RinoStick.apk (e copia para dist/ e dist/instalar-sem-computador/)
+./build.sh            # só compila  -> build/RinoStick.apk, dist/kit-de-instalacao/ e dist/RinoStick-FireTV-kit.zip
 ./build.sh install    # compila, instala no aparelho conectado, concede permissões e abre o app
 ```
 
@@ -145,10 +150,10 @@ Por dentro, a sequência é: aapt2 compile/link (com `-A assets`) → `javac --r
 ## 6. Instalar num Fire TV novo
 
 1. No Fire TV, ative as opções de desenvolvedor: Configurações → Minha Fire TV → Sobre → clique 7× no nome do aparelho. Depois ligue Opções do desenvolvedor → **Depuração ADB** e anote o IP em Sobre → Rede.
-2. No Mac: `cd ~/Documents/2 - workspace/rinostick-app/versao-fire-stick-amazon/dist && ./instalar.sh <IP>`. Aceite "Permitir depuração" na TV.
-3. Para também tirar anúncios, coleta e apps sem uso: `./instalar.sh <IP> --limpar`. Os valores originais ficam salvos em `dist/backups/<ip>-<data>/`.
+2. No computador: rodar o instalador do kit (`bash dist/kit-de-instalacao/instalar-mac.command <IP>` no Mac; `instalar-windows.bat` no Windows). Aceite "Permitir depuração" na TV. Passo a passo para pessoas comuns: `dist/kit-de-instalacao/COMO-INSTALAR.md`.
+3. No fim, o instalador pergunta se quer tirar anúncios, coleta e apps sem uso (resposta `s`). Os valores originais ficam em `backups/<ip>-<data>/`, ao lado do instalador.
 
-O que o `--limpar` faz:
+O que a limpeza faz:
 - Settings secure:
   - `advertisingIdApp:interestBasedAds:value` → 0
   - `amz_limit_ad_tracking` → 1

@@ -24,6 +24,13 @@ import android.widget.TextView;
 final class Setup {
 
     static final String PKG = "com.rinostick.app";
+    static final String GUIDE = "github.com/henriquesevero/rinostick-app";
+
+    static String ipLine() {
+        String ip = Device.localIp();
+        return ip != null ? "IP desta TV: " + ip : "IP desta TV: Configurações → Rede e Internet";
+    }
+
     static boolean asked; // pergunta automática só uma vez por sessão
 
     private Setup() { }
@@ -51,7 +58,7 @@ final class Setup {
                         + "Para o botão Home, a música e o protetor de tela funcionarem, o RinoStick precisa de "
                         + "algumas permissões. Antes, ligue a Depuração USB em Configurações → Sistema → "
                         + "Opções do desenvolvedor.\n\nSem Opções do desenvolvedor? Vá em Configurações → Sistema → "
-                        + "Sobre e clique 7 vezes em \"Build do Android TV OS\".",
+                        + "Sobre e clique 7 vezes em \"Build do Android TV OS\".\n\n" + ipLine(),
                 new String[]{"Configurar agora", "Abrir Opções do desenvolvedor", "Agora não"},
                 w -> {
                     if (w == 0) run(a, done);
@@ -103,7 +110,7 @@ final class Setup {
                     p.dismiss();
                     Ui.menu(a, "Não deu certo\n\n" + (error != null ? error : "Algumas permissões não foram liberadas.")
                                     + "\n\nConfira se a Depuração USB está ligada e aceite o aviso na TV. "
-                                    + "Se a sua TV só tiver \"Depuração sem fio\" com código, configure pelo computador.",
+                                    + "Se não funcionar, configure por um computador (Mac ou Windows). Guia: " + GUIDE + "\n\n" + ipLine(),
                             new String[]{"Tentar de novo", "Abrir Opções do desenvolvedor", "Fechar"},
                             w -> {
                                 if (w == 0) run(a, done);

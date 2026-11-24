@@ -7,7 +7,7 @@ Tela inicial minimalista para TV, no estilo Apple TV: sem anúncios, só com os 
 - "Tocando agora" (Spotify etc.), com capa, ⏯ ⏭ e ✕.
 - Pastas, reordenação, apps ocultos e temas claro, escuro ou automático.
 - Painel único de Ajustes, protetor de tela "Aurora" e sons suaves.
-- Assistente que libera as permissões **sem computador**.
+- Instalador de um clique para **Mac e Windows** (e, no Google TV, também direto pela TV).
 
 ## Duas versões
 
@@ -25,8 +25,8 @@ Cada pasta é um projeto completo e independente (código-fonte, `build.sh`, `di
 | `src/`, `res/`, `assets/`, `AndroidManifest.xml` | Código-fonte do app |
 | `build.sh` | Compila (`./build.sh`) ou compila e instala no aparelho conectado (`./build.sh install`) |
 | `tools/` | Utilitários (gerador do som de navegação) |
-| `dist/` | Instalação pelo Mac (`instalar.sh`) e o guia `LEIA-ME.md` |
-| `dist/instalar-sem-computador/` | Guia para instalar **só pela TV** (app Downloader + link do APK) |
+| `dist/` | Guia de quem mantém o projeto (`LEIA-ME.md`) |
+| `dist/kit-de-instalacao/` | O que vai para as pessoas: guia passo a passo (Mac e Windows), instaladores `instalar-mac.command` e `instalar-windows.bat` e o app |
 | `CLAUDE.md` | Guia técnico completo: arquitetura, limites do sistema, decisões e preferências de design |
 
 ## Compilar
@@ -41,7 +41,11 @@ cd versao-fire-stick-amazon   # ou versao-google-tv
 
 ## Baixar
 
-Os APKs ficam nos *Releases*. Links que sempre trazem a versão mais nova:
+Tudo fica nos *Releases*. Links que sempre trazem a versão mais nova:
 
-- Fire TV: `https://github.com/henriquesevero/rinostick-app/releases/latest/download/RinoStick.apk`
-- Google TV: `https://github.com/henriquesevero/rinostick-app/releases/latest/download/RinoStick-GoogleTV.apk`
+| | Kit de instalação (Mac e Windows) | Só o app |
+|---|---|---|
+| Fire TV | `https://github.com/henriquesevero/rinostick-app/releases/latest/download/RinoStick-FireTV-kit.zip` | `…/releases/latest/download/RinoStick.apk` |
+| Google TV | `https://github.com/henriquesevero/rinostick-app/releases/latest/download/RinoStick-GoogleTV-kit.zip` | `…/releases/latest/download/RinoStick-GoogleTV.apk` |
+
+Passo a passo: `dist/kit-de-instalacao/COMO-INSTALAR.md` de cada versão.

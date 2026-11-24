@@ -35,8 +35,13 @@ if [ ! -f "$KS" ]; then
 fi
 "$BT/apksigner" sign --ks "$KS" --ks-pass pass:android --ks-key-alias launcher \
     --out build/RinoStick.apk build/aligned.apk
-mkdir -p dist/instalar-sem-computador && cp build/RinoStick.apk dist/RinoStick.apk && cp build/RinoStick.apk dist/instalar-sem-computador/RinoStick.apk  # mantém os pacotes atualizados
-echo "OK: build/RinoStick.apk"
+# Kit de instalação (Mac + Windows + guia + app) e o zip para distribuir
+KIT=dist/kit-de-instalacao
+cp build/RinoStick.apk dist/RinoStick.apk && cp build/RinoStick.apk "$KIT/RinoStick.apk"
+rm -rf "build/RinoStick-FireTV-kit" && mkdir -p "build/RinoStick-FireTV-kit"
+cp "$KIT/COMO-INSTALAR.md" "$KIT/instalar-mac.command" "$KIT/instalar-windows.bat" "$KIT/RinoStick.apk" "build/RinoStick-FireTV-kit/"
+(cd build && rm -f "../dist/RinoStick-FireTV-kit.zip" && zip -q -r -X "../dist/RinoStick-FireTV-kit.zip" "RinoStick-FireTV-kit")
+echo "OK: build/RinoStick.apk e dist/RinoStick-FireTV-kit.zip"
 
 if [ "${1:-}" = "install" ]; then
     adb install -r build/RinoStick.apk

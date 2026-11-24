@@ -52,27 +52,30 @@ final class Setup {
 
     // ------------------------------------------------------------------ fluxo
 
+    static final String GUIDE = "github.com/henriquesevero/rinostick-app";
+
+    static String ipLine() {
+        String ip = Device.localIp();
+        return ip != null ? "IP desta TV: " + ip : "IP desta TV: Configurações → Minha Fire TV → Sobre → Rede";
+    }
+
+    /**
+     * O Fire OS atual (8.1.x) ignora conexões ADB vindas do próprio aparelho, então
+     * as permissões só podem ser liberadas por um computador (dist/kit-de-instalacao).
+     * "Tentar aqui mesmo" continua disponível para versões antigas do Fire OS.
+     */
     static void intro(final Activity a, final Runnable done) {
         asked = true;
         Ui.menu(a, "Configurar o RinoStick\n\n"
-                        + "Para o botão Home, a música e o protetor de tela funcionarem, o RinoStick precisa de "
-                        + "algumas permissões. Antes, ligue a Depuração ADB em Configurações → Minha Fire TV → "
-                        + "Opções do desenvolvedor.",
-                new String[]{"Configurar agora", "Configurar e remover anúncios", "Abrir Opções do desenvolvedor", "Agora não"},
+                        + "O Fire TV não deixa um app liberar as próprias permissões. Faça isso uma vez "
+                        + "por um computador (Mac ou Windows), com o instalador do RinoStick. Guia: " + GUIDE + "\n\n"
+                        + "Antes, ligue a Depuração ADB em Configurações → Minha Fire TV → Opções do desenvolvedor.\n\n"
+                        + ipLine(),
+                new String[]{"Entendi", "Abrir Opções do desenvolvedor", "Tentar configurar aqui mesmo"},
                 w -> {
-                    if (w == 0) run(a, false, done);
-                    else if (w == 1) confirmClean(a, done);
-                    else if (w == 2) openDevSettings(a);
+                    if (w == 1) openDevSettings(a);
+                    else if (w == 2) run(a, false, done);
                 });
-    }
-
-    static void confirmClean(final Activity a, final Runnable done) {
-        Ui.menu(a, "Remover anúncios e apps sem uso?\n\n"
-                        + "Desliga os anúncios personalizados, a coleta de dados de uso e os apps: Luna, Amazon Music, "
-                        + "Amazon Fotos, Shop, Mini TV, Amazon Kids, Central de jogos, Acesso antecipado, "
-                        + "Novidades, Tela ambiente, Casa inteligente e Áudio multiambiente. Dá para religar depois.",
-                new String[]{"Confirmar", "Cancelar"},
-                w -> { if (w == 0) run(a, true, done); });
     }
 
     static void openDevSettings(Activity a) {
@@ -134,7 +137,8 @@ final class Setup {
                 } else {
                     p.dismiss();
                     Ui.menu(a, "Não deu certo\n\n" + (error != null ? error : "Algumas permissões não foram liberadas.")
-                                    + "\n\nConfira se a Depuração ADB está ligada e aceite o aviso na TV.",
+                                    + "\n\nNas versões atuais do Fire TV, a configuração precisa ser feita por um computador "
+                                    + "(Mac ou Windows). Guia: " + GUIDE + "\n\n" + ipLine(),
                             new String[]{"Tentar de novo", "Abrir Opções do desenvolvedor", "Fechar"},
                             w -> {
                                 if (w == 0) run(a, clean, done);

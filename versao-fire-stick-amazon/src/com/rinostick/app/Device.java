@@ -56,6 +56,19 @@ final class Device {
         return "";
     }
 
+    /** IP da TV na rede local (Wi-Fi ou cabo), para o usuário digitar no computador. */
+    static String localIp() {
+        try {
+            for (java.net.NetworkInterface ni : java.util.Collections.list(java.net.NetworkInterface.getNetworkInterfaces())) {
+                if (!ni.isUp() || ni.isLoopback()) continue;
+                for (java.net.InetAddress ad : java.util.Collections.list(ni.getInetAddresses())) {
+                    if (ad instanceof java.net.Inet4Address && !ad.isLoopbackAddress()) return ad.getHostAddress();
+                }
+            }
+        } catch (Exception ignored) { }
+        return null;
+    }
+
     // ------------------------------------------------------------------ protetor de tela
 
     /** Na primeira execução, guarda o protetor original e liga o nosso. */

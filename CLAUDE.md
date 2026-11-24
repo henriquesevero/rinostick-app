@@ -11,4 +11,6 @@ Regras:
 - Antes de mexer, leia o `CLAUDE.md` da pasta da versão em questão.
 - Mudanças comuns (grade, visual, cartão de música, clima, ajustes) devem ser feitas **nas duas pastas**, a menos que o usuário peça só uma.
 - Os dois APKs usam o mesmo ID (`com.rinostick.app`) e a mesma chave (`~/.android/firelauncher.keystore`, nunca versionar).
-- Release no GitHub: anexar `RinoStick.apk` (Fire) e `RinoStick-GoogleTV.apk` (Google) na mesma release, com esses nomes exatos, porque os links `releases/latest/download/<nome>` dos guias dependem deles.
+- Release no GitHub: anexar `RinoStick.apk`, `RinoStick-FireTV-kit.zip`, `RinoStick-GoogleTV.apk` e `RinoStick-GoogleTV-kit.zip` (gerados pelo `build.sh` de cada pasta) na mesma release, com esses nomes exatos, porque os links `releases/latest/download/<nome>` dos guias e dos instaladores dependem deles.
+- **Fire TV não se configura sozinho** (Fire OS 8.1.x bloqueia ADB vindo do próprio aparelho): instalação por Mac ou Windows com o kit. No Google TV o assistente da TV funciona.
+- Os instaladores `.bat` (Windows) são só ASCII e com quebra de linha CRLF; nunca foram testados num Windows de verdade.

@@ -36,8 +36,13 @@ if [ ! -f "$KS" ]; then
 fi
 "$BT/apksigner" sign --ks "$KS" --ks-pass pass:android --ks-key-alias launcher \
     --out build/RinoStick-GoogleTV.apk build/aligned.apk
-mkdir -p dist/instalar-sem-computador && cp build/RinoStick-GoogleTV.apk dist/ && cp build/RinoStick-GoogleTV.apk dist/instalar-sem-computador/  # mantém os pacotes atualizados
-echo "OK: build/RinoStick-GoogleTV.apk"
+# Kit de instalação (Mac + Windows + guia + app) e o zip para distribuir
+KIT=dist/kit-de-instalacao
+cp build/RinoStick-GoogleTV.apk dist/RinoStick-GoogleTV.apk && cp build/RinoStick-GoogleTV.apk "$KIT/RinoStick-GoogleTV.apk"
+rm -rf "build/RinoStick-GoogleTV-kit" && mkdir -p "build/RinoStick-GoogleTV-kit"
+cp "$KIT/COMO-INSTALAR.md" "$KIT/instalar-mac.command" "$KIT/instalar-windows.bat" "$KIT/RinoStick-GoogleTV.apk" "build/RinoStick-GoogleTV-kit/"
+(cd build && rm -f "../dist/RinoStick-GoogleTV-kit.zip" && zip -q -r -X "../dist/RinoStick-GoogleTV-kit.zip" "RinoStick-GoogleTV-kit")
+echo "OK: build/RinoStick-GoogleTV.apk e dist/RinoStick-GoogleTV-kit.zip"
 
 if [ "${1:-}" = "install" ]; then
     adb install -r build/RinoStick-GoogleTV.apk

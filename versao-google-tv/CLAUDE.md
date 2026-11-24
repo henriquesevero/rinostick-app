@@ -18,9 +18,9 @@
 | Ajustes → Apps | "Loja e busca da Amazon" | **Google Play** (`openPlayStore`) e **Tela do Google** (`openSystemHome`, pausa o redirecionamento por 10 min) |
 | Ajustes → seção | "Fire TV" / "Configurações do Fire TV" | "TV" / "Configurações da TV" (`openTvSettings`) |
 | `Setup` | Configurar / Configurar e remover anúncios | Só "Configurar agora"; sem limpeza. Textos com o caminho do Google TV (Sistema → Opções do desenvolvedor → Depuração USB) |
-| `AdbSelf` | 127.0.0.1:5555 | Igual. Funciona onde o adbd escuta na 5555 (Chromecast com Google TV, maioria dos Android TV). TVs só com "Depuração sem fio" (pareamento TLS) **não** funcionam pelo assistente: use o `dist/instalar.sh IP:PORTA` depois de `adb pair` |
+| `AdbSelf` | 127.0.0.1:5555 | Igual. Funciona onde o adbd escuta na 5555 (Chromecast com Google TV, maioria dos Android TV). TVs só com "Depuração sem fio" (pareamento TLS) **não** funcionam pelo assistente: use o instalador do kit com `IP:PORTA` depois de `adb pair` |
 | `DEFAULT_HIDDEN` / `DEFAULT_ORDER` | Apps da Amazon ocultos; Apple TV, Netflix, Firebat… | Nada oculto; Apple TV (`com.apple.atve.androidtv.appletv`), Netflix, Prime Video, YouTube (`com.google.android.youtube.tv`), Spotify |
-| `dist/instalar.sh` | Tem `--limpar` | Sem `--limpar`; aceita `IP:porta` |
+| Instaladores do kit (Mac/Windows) | Perguntam se quer remover anúncios | Sem limpeza; aceitam `IP:porta` (Depuração sem fio) |
 | Segurar OK num app | Entra direto no modo mover; ☰/⏯ abre as opções | Abre as opções com **"Mover"** primeiro (`longPressOptions`): o controle do Google TV não tem ☰ |
 | Aviso de configuração pendente | "aperte ☰" | "vá na engrenagem" |
 
@@ -74,7 +74,7 @@ O Google TV **não deixa** trocar a tela inicial pelas configurações. A soluç
 | Acessibilidade | ver seção 2 | Botão Home → tela nova |
 | Ouvinte de notificações | `adb shell cmd notification allow_listener com.rinostick.app/com.rinostick.app.NowPlayingListener` | Ler sessões de mídia ("Tocando agora") |
 
-O `build.sh install` e o `dist/instalar.sh` já fazem tudo isso. **Sem computador:** o assistente do app (`Setup`) faz o mesmo pelo ADB do próprio aparelho; o usuário liga a Depuração USB e aceita "Permitir depuração" na TV (limite na seção 0). Instalação só pela TV: app Downloader (Google Play) + link do APK (veja `dist/instalar-sem-computador/COMO-INSTALAR.md`). Num reset de fábrica, as permissões somem: reinstale e rode o assistente (ou `instalar.sh`).
+O `build.sh install` e os instaladores do kit (`dist/kit-de-instalacao/instalar-mac.command` e `instalar-windows.bat`) já fazem tudo isso. **Sem computador:** o assistente do app (`Setup`) faz o mesmo pelo ADB do próprio aparelho; o usuário liga a Depuração USB e aceita "Permitir depuração" na TV. Funcionou no emulador de Google TV. (No **Fire TV** isso é bloqueado pelo Fire OS 8.1.x; no Google TV não.) Instalação só pela TV: Downloader + link do APK. Guia para pessoas comuns: `dist/kit-de-instalacao/COMO-INSTALAR.md` (caminho A pela TV, caminho B por Mac/Windows). Num reset de fábrica, as permissões somem: reinstale e configure de novo.
 
 ---
 
@@ -93,7 +93,7 @@ O `build.sh install` e o `dist/instalar.sh` já fazem tudo isso. **Sem computado
 | `Weather.java` | Clima (detalhes abaixo) |
 | `Device.java` | Ações de sistema (detalhes abaixo) |
 | `HomeRedirectService.java` | Redirecionamento do HOME (seção 2) |
-| `AdbSelf.java` | Cliente ADB mínimo que conecta no adbd do **próprio** aparelho (127.0.0.1:5555, chave RSA própria em `files/adbkey`). Permite configurar sem computador |
+| `AdbSelf.java` | Cliente ADB mínimo que conecta no adbd do **próprio** aparelho (127.0.0.1:5555, chave RSA própria em `files/adbkey`). No Google TV funciona (testado no emulador); no Fire OS 8.1.x atual, não |
 | `Setup.java` | Assistente "Configurar o RinoStick": via `AdbSelf`, faz o `pm grant`, liga a acessibilidade e o ouvinte de notificações e, opcionalmente, a limpeza (backup em prefs `cleanBackup`/`cleanDisabled`). Abre sozinho se faltar permissão; também fica em Ajustes → Fire TV |
 | `Screensaver.java` + `AuroraView.java` | Protetor de tela `DreamService` "Aurora": aurora animada em baixa resolução + relógio |
 
@@ -159,7 +159,7 @@ Requisitos no Mac:
 
 ```
 cd ~/Documents/2 - workspace/rinostick-app/versao-google-tv
-./build.sh            # só compila  -> build/RinoStick-GoogleTV.apk (e copia para dist/ e dist/instalar-sem-computador/)
+./build.sh            # só compila  -> build/RinoStick-GoogleTV.apk, dist/kit-de-instalacao/ e dist/RinoStick-GoogleTV-kit.zip
 ./build.sh install    # compila, instala no aparelho conectado, concede permissões e abre o app
 ```
 
@@ -171,7 +171,7 @@ Por dentro, a sequência é: aapt2 compile/link (com `-A assets`) → `javac --r
 
 ## 6. Instalar numa TV Google
 
-Veja `dist/LEIA-ME.md` (pelo Mac, inclusive "Depuração sem fio") e `dist/instalar-sem-computador/COMO-INSTALAR.md` (só pela TV). Não existe limpeza de anúncios nesta versão.
+Veja `dist/LEIA-ME.md` (inclusive "Depuração sem fio") e `dist/kit-de-instalacao/COMO-INSTALAR.md` (pela TV, Mac ou Windows). Não existe limpeza de anúncios nesta versão.
 
 ---
 
