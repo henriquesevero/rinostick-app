@@ -154,7 +154,9 @@ final class Setup {
         final Dialog d;
         final TextView msg;
 
-        Progress(Activity a) {
+        Progress(Activity a) { this(a, "Configurar o RinoStick"); }
+
+        Progress(Activity a, String titleText) {
             boolean dark = Ui.isDark(a);
             d = Ui.fullDialog(a);
             FrameLayout over = new FrameLayout(a);
@@ -165,7 +167,7 @@ final class Setup {
             int pad = (int) Ui.px(44);
             panel.setPadding(pad, pad, pad, pad);
             TextView title = Ui.text(a, Ui.px(36), Ui.semibold, Ui.text(dark));
-            title.setText("Configurar o RinoStick");
+            title.setText(titleText);
             panel.addView(title);
             msg = Ui.text(a, Ui.px(28), Ui.regular, Ui.text2(dark));
             msg.setLineSpacing(Ui.px(8), 1f);

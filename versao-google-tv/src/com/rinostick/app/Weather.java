@@ -34,11 +34,16 @@ final class Weather {
     static boolean manual(Context c) { return Ui.prefs(c).getBoolean("wManual", false); }
 
     /** Atualiza em segundo plano se o dado estiver velho (ou se force); chama done na thread principal. */
+    static volatile long lastFail;
+
     static void refresh(Context ctx, boolean force, Runnable done) {
         final Context c = ctx.getApplicationContext();
         SharedPreferences p = Ui.prefs(c);
         if (!enabled(c) || busy) return;
-        if (!force && System.currentTimeMillis() - p.getLong("wTs", 0) < MAX_AGE) return;
+        long now = System.currentTimeMillis();
+        if (!force && now - p.getLong("wTs", 0) < MAX_AGE) return;
+        // Sem internet: não tenta a cada minuto (o relógio chama isto 1x/min); espera 5 min.
+        if (!force && now - lastFail < 5 * 60 * 1000L) return;
         busy = true;
         new Thread(() -> {
             boolean ok = false;
@@ -64,6 +69,7 @@ final class Weather {
             } finally {
                 busy = false;
             }
+            lastFail = ok ? 0 : System.currentTimeMillis();
             if (done != null) new Handler(Looper.getMainLooper()).post(done);
         }, "weather").start();
     }

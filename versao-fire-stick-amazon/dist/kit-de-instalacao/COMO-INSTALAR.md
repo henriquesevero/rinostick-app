@@ -77,6 +77,16 @@ Deixe a TV ligada nessa tela. Você vai precisar dela na Parte 3.
 | Controlar a música | Suba até o cartão da música no topo: ⏯ pausa, ⏭ avança, ✕ fecha |
 | Ver os apps de baixo | Desça a partir da 2ª fileira: o topo some e aparecem todos os apps |
 
+## Como atualizar
+
+O RinoStick avisa sozinho quando sai uma versão nova: aparece **"Nova versão… do RinoStick"** embaixo da tela inicial e o item **"Atualização disponível"** nos Ajustes (aperte **☰** e escolha o item).
+
+1. Escolha **"Atualização disponível"**.
+2. Só na primeira vez: o sistema pede para **permitir que o RinoStick instale apps**. Na tela que abrir, ligue o RinoStick, volte e escolha "Atualização disponível" de novo.
+3. Espere baixar e confirme em **Instalar**.
+
+Suas pastas, a ordem dos apps, os ajustes e as permissões continuam como estavam. Não precisa de computador.
+
 ## Se algo der errado
 
 | Problema | Solução |

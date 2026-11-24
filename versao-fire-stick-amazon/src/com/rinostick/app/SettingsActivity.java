@@ -262,6 +262,18 @@ public class SettingsActivity extends Activity {
         section("Fire TV");
         row("network", Glyph.Kind.WIFI, "Rede", "Wi‑Fi e Ethernet", false, () -> Device.openNetwork(this));
         row("fire", Glyph.Kind.GEAR, "Configurações do Fire TV", null, false, () -> Device.openFireSettings(this));
+        final String upd = Updater.available(this);
+        row("update", Glyph.Kind.RESTORE, upd != null ? "Atualização disponível" : "Atualizações",
+                upd != null ? "Versão " + upd + " — toque para atualizar" : "Versão " + Updater.current(this) + " · toque para procurar",
+                false, () -> {
+                    if (Updater.available(this) != null) { Updater.start(this); return; }
+                    Toast.makeText(this, "Procurando atualização…", Toast.LENGTH_SHORT).show();
+                    Updater.check(this, true, () -> {
+                        if (Updater.available(this) == null)
+                            Toast.makeText(this, "Você já tem a versão mais nova", Toast.LENGTH_SHORT).show();
+                        refresh();
+                    });
+                });
         row("setup", Glyph.Kind.RESTORE, "Configurar o RinoStick", Setup.ready(this) ? "Permissões liberadas" : "Pendente — toque para configurar",
                 false, () -> Setup.intro(this, this::refresh));
         row("restore", Glyph.Kind.RESTORE, "Restaurar original", null, true, () ->

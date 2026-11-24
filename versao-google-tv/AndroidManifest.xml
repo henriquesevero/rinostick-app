@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rinostick.app"
-    android:versionCode="10"
-    android:versionName="1.4.5">
+    android:versionCode="11"
+    android:versionName="1.5">
 
     <!-- Concedida via adb; usada só para desfazer a ativação do serviço ao restaurar. -->
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <!-- Atualização pelo próprio app (Updater) -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!-- Clima (Open-Meteo) -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -63,6 +65,10 @@
             android:theme="@style/OverlayTheme"
             android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout|uiMode|density" />
+
+        <receiver
+            android:name=".Updater$Result"
+            android:exported="false" />
 
         <service
             android:name=".Screensaver"

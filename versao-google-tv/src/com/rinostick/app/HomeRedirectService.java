@@ -43,6 +43,23 @@ public class HomeRedirectService extends AccessibilityService {
     protected void onServiceConnected() {
         instance = this;
         refreshHomes();
+        reopenAfterUpdate();
+    }
+
+    /**
+     * Logo depois de uma atualização do RinoStick o app é fechado e o sistema volta
+     * para a tela original; nenhum evento de janela acontece até o próximo Home.
+     * Se o serviço religou até 2 min após a atualização, abre o RinoStick.
+     */
+    private void reopenAfterUpdate() {
+        try {
+            long since = System.currentTimeMillis()
+                    - getPackageManager().getPackageInfo(getPackageName(), 0).lastUpdateTime;
+            if (since >= 0 && since < 2 * 60 * 1000L) {
+                startActivity(new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NO_ANIMATION));
+            }
+        } catch (Exception ignored) { }
     }
 
     @Override

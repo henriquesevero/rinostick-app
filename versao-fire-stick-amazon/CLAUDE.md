@@ -74,6 +74,7 @@ O `build.sh install` e os instaladores do kit (`dist/kit-de-instalacao/instalar-
 | `HomeRedirectService.java` | Redirecionamento do HOME (seção 2) |
 | `AdbSelf.java` | Cliente ADB mínimo que conecta no adbd do **próprio** aparelho (127.0.0.1:5555, chave RSA própria em `files/adbkey`). No Fire OS 8.1.x atual **não funciona** (veja a seção 3); fica para Fire OS antigos |
 | `Setup.java` | Assistente "Configurar o RinoStick": via `AdbSelf`, faz o `pm grant`, liga a acessibilidade e o ouvinte de notificações e, opcionalmente, a limpeza (backup em prefs `cleanBackup`/`cleanDisabled`). Abre sozinho se faltar permissão; também fica em Ajustes → Fire TV |
+| `Updater.java` | **Atualização pelo próprio app** (desde a v1.5). Uma vez por dia (`MainActivity.onResume`) consulta `api.github.com/repos/henriquesevero/rinostick-app/releases/latest`; se `tag_name` (sem o "v") for maior que o `versionName`, mostra aviso na dica da tela inicial e o item "Atualização disponível" em Ajustes. Ao escolher: pede a permissão "instalar apps desconhecidos" para o RinoStick na 1ª vez (`ACTION_MANAGE_UNKNOWN_APP_SOURCES`), baixa `releases/latest/download/RinoStick.apk` e instala com `PackageInstaller` (o sistema mostra a confirmação; `Updater.Result` abre a tela). Prefs: `updLatest`, `updTs`. **Para publicar uma versão:** subir `versionCode` e `versionName` nas duas pastas, criar a release com a tag `v<versionName>` (ex.: `v1.5.1`) e anexar os 4 arquivos com os nomes de sempre |
 | `Screensaver.java` + `AuroraView.java` | Protetor de tela `DreamService` "Aurora": aurora animada em baixa resolução + relógio |
 
 Ícones disponíveis em `Glyph.java`: GEAR, POWER, APPEARANCE, SPEAKER, WIFI, BAG, TV, EYE, SORT, RESTORE, CLOSE, PLAY, PAUSE, NEXT, XMARK, SUN, MOON, CLOUD, PARTLY, RAIN, STORM, FOG.
@@ -213,7 +214,12 @@ O aparelho original (o primeiro) tem os backups em `backup/` (fora do git).
   # ... navegar ...
   adb shell dumpsys gfxinfo com.rinostick.app
   ```
-  Referência atual: tela parada = 0 quadros; navegação ~6 ms/quadro; ~56 MB de memória.
+  Referência (v1.5, Fire TV Stick 4K Max, 24/11/2026): tela parada = 0 quadros e 0% de CPU; navegação: mediana 7 ms, 90% ≤ 14–17 ms, 99% ≈ 48 ms; ~61–66 MB de memória. O modo mover (ícones tremendo) fica em 17–18 ms/quadro e reconstrói a grade a cada passo — aceito, porque é raro.
+- **Otimizações e correções da revisão da v1.5:**
+  - `MainActivity.reload()` só reconstrói a grade se a assinatura (`signature()`: itens, nomes, apps das pastas, tema) mudou; senão mantém os objetos antigos (a grade, o modo mover e as pastas comparam `Item`/`Folder` por identidade). `pkgRx` zera `gridSig` (banner pode ter mudado). Tirou o engasgo de ~150 ms ao voltar com Home.
+  - `Weather.refresh`: sem internet, espera 5 min antes de tentar de novo (antes tentava a cada minuto, chamado pelo relógio).
+  - `Updater.check`: sem internet ou erro do GitHub, tenta de novo em 1 h (não a cada volta à tela inicial).
+  - `HomeRedirectService.reopenAfterUpdate()`: se o serviço religar até 2 min depois de uma atualização do app, abre o RinoStick (antes a tela original ficava na frente até o próximo Home).
 - Antes de desativar apps ou mudar ajustes do sistema: **mostrar a lista e pedir aprovação**.
 - Comunicação: português, explicações simples e honestas (dizer o que não foi testado).
 

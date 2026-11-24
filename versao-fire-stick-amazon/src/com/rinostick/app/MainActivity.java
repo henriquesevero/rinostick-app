@@ -231,6 +231,7 @@ public class MainActivity extends Activity {
         if (nowPlaying != null) nowPlaying.start();
         updateWeather();
         Weather.refresh(this, false, this::updateWeather);
+        Updater.check(this, false, this::updateHint); // no máximo 1x por dia
         // Primeiro uso (ou permissões perdidas): oferece o assistente de configuração.
         if (!Setup.asked && !Setup.ready(this)) {
             content.postDelayed(() -> { if (resumed && !Setup.ready(this)) Setup.intro(this, this::updateHint); }, 800);
@@ -289,6 +290,7 @@ public class MainActivity extends Activity {
             @Override public void onReceive(Context c, Intent i) {
                 Uri u = i.getData();
                 if (u != null) cache.remove(u.getSchemeSpecificPart());
+                gridSig = null; // o banner de um app pode ter mudado
                 if (resumed) reload();
             }
         };
@@ -428,6 +430,9 @@ public class MainActivity extends Activity {
         } else if (!Setup.ready(this)) {
             hint.setTextColor(0xFFFF9F0A);
             hint.setText("Configuração pendente — aperte ☰ e escolha \"Configurar o RinoStick\"");
+        } else if (Updater.available(this) != null) {
+            hint.setTextColor(Ui.text2(dark));
+            hint.setText("Nova versão " + Updater.available(this) + " do RinoStick — aperte ☰ e escolha \"Atualização disponível\"");
         } else {
             hint.setText("");
         }
@@ -435,9 +440,33 @@ public class MainActivity extends Activity {
 
     // ------------------------------------------------------------------ apps e pastas
 
+    /** Assinatura do que a grade mostra; se não mudou, não precisa redesenhar. */
+    String gridSig;
+
+    String signature() {
+        StringBuilder b = new StringBuilder(dark ? "d" : "l");
+        for (Item it : items) {
+            b.append(';').append(it.key).append('|').append(it.label());
+            if (it.folder != null) for (App a : it.folder.apps) b.append(',').append(a.key);
+        }
+        return b.toString();
+    }
+
     void reload() {
+        // Voltar à tela inicial sem nada ter mudado não reconstrói a grade (evita o
+        // engasgo ao apertar Home). Os objetos antigos são mantidos porque a grade,
+        // o modo mover e as pastas comparam por identidade.
+        List<Item> oldItems = new ArrayList<>(items);
+        Map<String, Folder> oldFolders = new LinkedHashMap<>(folders);
         loadAll();
-        buildGrid(focusKey);
+        if (signature().equals(gridSig) && content.getChildCount() > 0) {
+            items.clear();
+            items.addAll(oldItems);
+            folders.clear();
+            folders.putAll(oldFolders);
+        } else {
+            buildGrid(focusKey);
+        }
         if (openFolderId != null && folderDialog != null) {
             Folder f = folders.get(openFolderId);
             folderDialog.dismiss();
@@ -638,6 +667,7 @@ public class MainActivity extends Activity {
         } else {
             quiet = false;
         }
+        gridSig = signature();
     }
 
     View makeTile(final Item it, final boolean inFolder, final int rowIndex) {
