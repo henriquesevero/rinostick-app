@@ -414,10 +414,10 @@ public class MainActivity extends Activity {
     void updateHint() {
         if (moving != null) {
             hint.setTextColor(Ui.text2(dark));
-            hint.setText("Mova com as setas  ·  OK para concluir  ·  ☰ ou ⏯ para mais opções");
+            hint.setText("Mova com as setas  ·  OK para concluir");
         } else if (!Setup.ready(this)) {
             hint.setTextColor(0xFFFF9F0A);
-            hint.setText("Configuração pendente — aperte ☰ e escolha \"Configurar o RinoStick\"");
+            hint.setText("Configuração pendente — vá na engrenagem e escolha \"Configurar o RinoStick\"");
         } else {
             hint.setText("");
         }
@@ -697,7 +697,8 @@ public class MainActivity extends Activity {
             if (moving != null) return true;
             Ui.select(this);
             if (inFolder) folderAppOptions(it.app);
-            else startMove(it);
+            else longPressOptions(it); // controles do Google TV não têm ☰
+
             return true;
         });
         return col;
@@ -972,9 +973,22 @@ public class MainActivity extends Activity {
         wiggle.start();
     }
 
+    /** Segurar OK: "Mover" + as opções do item (no Google TV não há tecla ☰). */
+    void longPressOptions(final Item it) {
+        itemOptions(it, true);
+    }
+
     void itemOptions(final Item it) {
+        itemOptions(it, false);
+    }
+
+    void itemOptions(final Item it, boolean withMove) {
         final List<String> labels = new ArrayList<>();
         final List<Runnable> acts = new ArrayList<>();
+        if (withMove) {
+            labels.add("Mover");
+            acts.add(() -> startMove(it));
+        }
         if (it.app != null) {
             labels.add("Nova pasta");
             acts.add(() -> newFolderWith(it));
@@ -997,8 +1011,10 @@ public class MainActivity extends Activity {
             labels.add("!Desfazer pasta");
             acts.add(() -> dissolveFolder(it));
         }
-        labels.add("Concluir edição");
-        acts.add(() -> { });
+        if (!withMove) {
+            labels.add("Concluir edição");
+            acts.add(() -> { });
+        }
         Ui.menu(this, it.label(), labels.toArray(new String[0]), w -> {
             endMove();
             acts.get(w).run();

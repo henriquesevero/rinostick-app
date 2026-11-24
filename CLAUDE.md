@@ -5,7 +5,7 @@ O repositório tem **duas cópias completas e independentes** do app. Idioma do 
 | Pasta | Para | Guia técnico |
 |---|---|---|
 | `versao-fire-stick-amazon/` | Fire TV Stick (versão principal, em uso e testada) | `versao-fire-stick-amazon/CLAUDE.md` |
-| `versao-google-tv/` | Google TV / Android TV (**nunca testada** num aparelho real) | `versao-google-tv/CLAUDE.md` (seção 0 = diferenças) |
+| `versao-google-tv/` | Google TV / Android TV (testada no emulador de Google TV 14, não numa TV física) | `versao-google-tv/CLAUDE.md` (seção 0 = diferenças) |
 
 Regras:
 - Antes de mexer, leia o `CLAUDE.md` da pasta da versão em questão.

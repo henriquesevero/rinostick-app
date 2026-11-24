@@ -214,7 +214,7 @@ final class Ui {
         if (title != null) {
             TextView t = text(a, px(26), medium, text2(dark));
             t.setText(title);
-            t.setMaxLines(6);
+            t.setMaxLines(16); // textos longos (assistente) não podem ser cortados
             t.setLineSpacing(px(6), 1f);
             t.setPadding((int) px(26), 0, (int) px(26), (int) px(18));
             panel.addView(t);
@@ -243,7 +243,8 @@ final class Ui {
         sv.addView(list);
         panel.addView(sv, new LinearLayout.LayoutParams(MATCH, WRAP));
 
-        FrameLayout.LayoutParams pl = new FrameLayout.LayoutParams((int) px(680), WRAP, Gravity.CENTER);
+        boolean wide = title != null && title.length() > 140;
+        FrameLayout.LayoutParams pl = new FrameLayout.LayoutParams((int) px(wide ? 860 : 680), WRAP, Gravity.CENTER);
         pl.topMargin = (int) px(80);
         pl.bottomMargin = (int) px(80);
         over.addView(panel, pl);

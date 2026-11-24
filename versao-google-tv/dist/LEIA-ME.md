@@ -2,7 +2,7 @@
 
 Pacote para instalar a tela inicial numa TV com Google TV ou Android TV.
 
-> **Ainda não testado num aparelho real.** O código foi adaptado do RinoStick do Fire TV e compila, mas ninguém rodou numa TV Google ainda. Teste primeiro na sua TV antes de mandar para outras pessoas.
+> **Testado no emulador oficial de Google TV (Android 14)**: instalação, assistente sem computador, botão Home, protetor de tela e ajustes funcionaram. Ainda não foi testado numa TV física; cada marca pode ter pequenas diferenças.
 
 ## O que tem aqui
 

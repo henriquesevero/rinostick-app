@@ -119,6 +119,12 @@ final class Setup {
             } catch (Exception e) {
                 err = e.getMessage() != null ? e.getMessage() : "Não foi possível configurar.";
             }
+            // O sistema leva um instante para registrar as permissões: espera até 5 s.
+            if (err == null) {
+                for (int i = 0; i < 25 && !ready(a); i++) {
+                    try { Thread.sleep(200); } catch (InterruptedException ignored) { }
+                }
+            }
             final String error = err;
             ui.post(() -> {
                 if (error == null && ready(a)) {

@@ -14,7 +14,7 @@ Tela inicial minimalista para TV, no estilo Apple TV: sem anúncios, só com os 
 | Pasta | Aparelho | APK | Situação |
 |---|---|---|---|
 | [`versao-fire-stick-amazon/`](versao-fire-stick-amazon) | Fire TV Stick (Fire OS 8) | `RinoStick.apk` | Em uso e testada |
-| [`versao-google-tv/`](versao-google-tv) | Google TV e Android TV | `RinoStick-GoogleTV.apk` | **Ainda não testada** num aparelho real |
+| [`versao-google-tv/`](versao-google-tv) | Google TV e Android TV | `RinoStick-GoogleTV.apk` | Testada no emulador de Google TV; ainda não numa TV física |
 
 Cada pasta é um projeto completo e independente (código-fonte, `build.sh`, `dist/` e o guia `CLAUDE.md`).
 

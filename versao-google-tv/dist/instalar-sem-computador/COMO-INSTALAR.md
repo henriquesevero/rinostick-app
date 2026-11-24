@@ -53,8 +53,8 @@ Se aparecer **"Não deu certo"** mesmo com a Depuração USB ligada, a sua TV s�
 | Quero… | Faço assim |
 |---|---|
 | Abrir um app | Selecione e aperte **OK** |
-| Mudar apps de lugar | **Segure OK** no ícone (eles tremem), mova com as setas e aperte **OK** para terminar |
-| Criar pasta, ocultar app ou ver informações | Selecione o app e aperte o botão de **menu/opções**, se o controle tiver |
+| Mudar apps de lugar | **Segure OK** no ícone e escolha **Mover**. Mova com as setas e aperte **OK** para terminar |
+| Criar pasta, ocultar app ou ver informações | **Segure OK** no ícone e escolha a opção |
 | Abrir os ajustes | Vá na **engrenagem** no canto de cima |
 | Colocar o seu nome na saudação | Ajustes → **Seu nome** |
 | Tema claro, escuro ou automático | Ajustes → **Aparência** |

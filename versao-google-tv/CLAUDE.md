@@ -1,7 +1,7 @@
 # RinoStick — guia técnico completo (para pessoas e para o Claude)
 
 > **Versão Google TV / Android TV** (pasta `versao-google-tv/`). É uma cópia da versão Fire TV
-> (`versao-fire-stick-amazon/`) adaptada. **Nunca foi testada num aparelho real** (o dono não tem TV Google).
+> (`versao-fire-stick-amazon/`) adaptada. **Testada no emulador oficial de Google TV (Android 14)**, ainda não numa TV física (o dono não tem TV Google).
 > As diferenças estão na seção 0; o resto do guia vale para as duas versões.
 > Idioma do usuário: **português do Brasil**.
 
@@ -21,10 +21,14 @@
 | `AdbSelf` | 127.0.0.1:5555 | Igual. Funciona onde o adbd escuta na 5555 (Chromecast com Google TV, maioria dos Android TV). TVs só com "Depuração sem fio" (pareamento TLS) **não** funcionam pelo assistente: use o `dist/instalar.sh IP:PORTA` depois de `adb pair` |
 | `DEFAULT_HIDDEN` / `DEFAULT_ORDER` | Apps da Amazon ocultos; Apple TV, Netflix, Firebat… | Nada oculto; Apple TV (`com.apple.atve.androidtv.appletv`), Netflix, Prime Video, YouTube (`com.google.android.youtube.tv`), Spotify |
 | `dist/instalar.sh` | Tem `--limpar` | Sem `--limpar`; aceita `IP:porta` |
+| Segurar OK num app | Entra direto no modo mover; ☰/⏯ abre as opções | Abre as opções com **"Mover"** primeiro (`longPressOptions`): o controle do Google TV não tem ☰ |
+| Aviso de configuração pendente | "aperte ☰" | "vá na engrenagem" |
 
 **Ao mudar algo comum às duas versões** (grade, cartão de música, clima, visual), faça a mesma mudança nas duas pastas.
 
-**Primeiro teste numa TV Google, confira:** o botão Home redireciona (se não, veja a classe com `adb shell dumpsys activity activities | grep mResumedActivity` e ajuste `onAccessibilityEvent`); o protetor de tela troca (`settings get secure screensaver_components`); o assistente conecta na 5555; nenhum app de sistema estranho aparece na grade (ocultar ou filtrar em `loadAll`).
+**Testado no emulador de Google TV 14** (`~/.android/avd/rinotv`, imagem `system-images;android-34;google-tv;arm64-v8a`; ligar com `$ANDROID_HOME/emulator/emulator -avd rinotv`, depois `adb -s emulator-5554 tcpip 5555` para simular a Depuração USB): assistente sem computador (aviso "Permitir depuração" → 3 permissões → "Tudo pronto"), botão Home (launcherx `.home.HomeActivity` → RinoStick), protetor Aurora, painel de Ajustes, segurar OK, Tela do Google (pausa funciona).
+
+**Numa TV física, confira também:** o botão Home redireciona (se não, veja a classe com `adb shell dumpsys activity activities | grep mResumedActivity` e ajuste `onAccessibilityEvent`); o protetor de tela troca (`settings get secure screensaver_components`); o assistente conecta na 5555; nenhum app de sistema estranho aparece na grade (ocultar ou filtrar em `loadAll`).
 
 ---
 
