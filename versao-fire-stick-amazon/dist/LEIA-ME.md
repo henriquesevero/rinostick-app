@@ -7,7 +7,7 @@ Pacote para instalar a tela inicial em outro Fire TV Stick.
 | Arquivo | Para que serve |
 |---|---|
 | `RinoStick.apk` | O app pronto |
-| `compartilhar/` | **Pacote para mandar a qualquer pessoa**: o app, o guia de instalação só pelo Fire TV (sem computador) e uma mensagem pronta. Não tem a chave nem nada pessoal. É atualizado a cada compilação |
+| `instalar-sem-computador/` | **Para mandar a qualquer pessoa**: o app, o guia de instalação só pelo Fire TV (sem computador). Não tem a chave nem nada pessoal. É atualizado a cada compilação |
 | `instalar.sh` | Instala e configura tudo com um comando |
 | `chave/firelauncher.keystore` | Chave de assinatura. **Fica fora do git (não vai para o GitHub)**. **Não perca**: guarde uma cópia no iCloud ou num pendrive. Sem ela não dá para lançar atualizações do app. Senha: `android` |
 | `backups/` | Criada pelo `--limpar`: valores originais de cada aparelho limpo (fora do git) |
@@ -90,4 +90,4 @@ O reset de fábrica apaga o app, as permissões, a limpeza de anúncios e os aju
 
 ## Atualizar ou alterar o app
 
-O código-fonte completo está no repositório (`~/Documents/2 - workspace/rinostick-app`, GitHub `henriquesevero/rinostick-app`): `src/`, `res/`, `assets/` e `build.sh`. O guia técnico completo é o `CLAUDE.md` na raiz. Para compilar em outro Mac, coloque a chave em `~/.android/firelauncher.keystore` e rode `./build.sh`. É preciso ter Java 17 e o Android SDK (platform 30 e build-tools 34).
+O código-fonte completo está no repositório (`~/Documents/2 - workspace/rinostick-app/versao-fire-stick-amazon`, GitHub `henriquesevero/rinostick-app`): `src/`, `res/`, `assets/` e `build.sh`. O guia técnico completo é o `CLAUDE.md` dessa pasta. Para compilar em outro Mac, coloque a chave em `~/.android/firelauncher.keystore` e rode `./build.sh`. É preciso ter Java 17 e o Android SDK (platform 30 e build-tools 34).

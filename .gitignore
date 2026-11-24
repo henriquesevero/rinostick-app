@@ -7,11 +7,11 @@ build/
 # Chave de assinatura — NUNCA versionar (guarde uma cópia segura fora do git)
 *.keystore
 *.jks
-dist/chave/
+**/dist/chave/
 
 # Valores de aparelhos (backups da limpeza)
 backup/
-dist/backups/
+**/dist/backups/
 
 # macOS
 .DS_Store

@@ -1,5 +1,6 @@
 #!/bin/bash
-# Compila, assina e (opcionalmente) instala o launcher no Fire TV.
+# Versão Google TV / Android TV.
+# Compila, assina e (opcionalmente) instala o launcher na TV.
 #   ./build.sh            -> só compila
 #   ./build.sh install    -> compila e instala via adb
 set -euo pipefail
@@ -34,12 +35,12 @@ if [ ! -f "$KS" ]; then
         -dname "CN=Inicio Launcher" >/dev/null 2>&1
 fi
 "$BT/apksigner" sign --ks "$KS" --ks-pass pass:android --ks-key-alias launcher \
-    --out build/RinoStick.apk build/aligned.apk
-mkdir -p dist/compartilhar && cp build/RinoStick.apk dist/RinoStick.apk && cp build/RinoStick.apk dist/compartilhar/RinoStick.apk  # mantém os pacotes atualizados
-echo "OK: build/RinoStick.apk"
+    --out build/RinoStick-GoogleTV.apk build/aligned.apk
+mkdir -p dist/instalar-sem-computador && cp build/RinoStick-GoogleTV.apk dist/ && cp build/RinoStick-GoogleTV.apk dist/instalar-sem-computador/  # mantém os pacotes atualizados
+echo "OK: build/RinoStick-GoogleTV.apk"
 
 if [ "${1:-}" = "install" ]; then
-    adb install -r build/RinoStick.apk
+    adb install -r build/RinoStick-GoogleTV.apk
     adb shell pm grant com.rinostick.app android.permission.WRITE_SECURE_SETTINGS
     SVC="com.rinostick.app/com.rinostick.app.HomeRedirectService"
     CUR=$(adb shell settings get secure enabled_accessibility_services | tr -d '\r')
