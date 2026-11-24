@@ -1,6 +1,7 @@
 // Gera o ícone e o banner do RinoStick (PNG) com CoreGraphics.
 // Uso (na pasta da versão):  swift tools/make_icons.swift [prévia-1024.png]
-// Saída: res/drawable-xxxhdpi/icon.png (192 px) e res/drawable-xhdpi/banner.png (640x360 px)
+// Saída: res/drawable-xxxhdpi/rinostick_icon.png (192 px) e res/drawable-xhdpi/rinostick_banner.png (640x360 px)
+// (nomes trocados na v1.4: a tela da Amazon guardava em cache a imagem antiga pelo nome)
 //
 // Estilo: só o nome ("Rino" + "Stick" em cores diferentes), dentro de uma cápsula de
 // vidro no estilo Liquid Glass (Apple), sobre um fundo em degradê. Cores: veja `themes`.
@@ -8,7 +9,7 @@
 import AppKit
 import CoreText
 
-func rgb(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat, _ a: CGFloat = 1) -> CGColor { CGColor(red: r, green: g, blue: b, alpha: a) }
+func rgb(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat, _ a: CGFloat = 1) -> CGColor { CGColor(srgbRed: r, green: g, blue: b, alpha: a) }
 
 /// Paleta. Escolha com a variável THEME (padrão: apple).
 ///   THEME=goldengate swift tools/make_icons.swift
@@ -43,7 +44,7 @@ let themes: [String: Theme] = [
 let theme = themes[ProcessInfo.processInfo.environment["THEME"] ?? "apple"] ?? themes["apple"]!
 let white = theme.rino
 let orange = theme.stick
-let space      = CGColorSpaceCreateDeviceRGB()
+let space      = CGColorSpace(name: CGColorSpace.sRGB)!
 
 func gradient(_ colors: [CGColor], _ locs: [CGFloat]? = nil) -> CGGradient {
     CGGradient(colorsSpace: space, colors: colors as CFArray, locations: locs)!
@@ -148,13 +149,48 @@ func icon(_ c: CGContext, _ s: CGFloat) {
     draw(c, line([("Stick", orange)], size: size, font: "Inter-Bold"), centerX: s / 2, baseline: s * 0.69)
 }
 
+/// Fire TV: a tela da Amazon desenha o ícone de apps instalados fora da loja num
+/// quadrado no meio de um quadro cinza (#5A5A5A). Este ícone usa o mesmo cinza de
+/// fundo (sem cantos) para não aparecer divisão, com a cápsula de vidro no meio.
+let amazonTile = rgb(0x5A / 255.0, 0x5A / 255.0, 0x5A / 255.0)   // #5A5A5A (medido nos pixels da tela da Amazon)
+func iconFire(_ c: CGContext, _ s: CGFloat) {
+    c.setFillColor(amazonTile); c.fill(CGRect(x: 0, y: 0, width: s, height: s))
+    let l = line([("Rino", theme.rino), ("Stick", theme.stick)], size: s * 0.155, font: "Inter-Bold")
+    let tw = width(l)
+    let ph = s * 0.30, padX = s * 0.06
+    let pill = CGRect(x: (s - tw) / 2 - padX, y: (s - ph) / 2, width: tw + padX * 2, height: ph)
+    glass(c, pill, radius: ph / 2)
+    draw(c, l, centerX: s / 2, baseline: s / 2 + s * 0.056)
+}
+
+/// Simulação do quadro da tela da Amazon (para conferir antes de instalar).
+func amazonTileMock(_ c: CGContext, _ w: CGFloat, _ h: CGFloat, _ iconDraw: (CGContext, CGFloat) -> Void) {
+    c.setFillColor(rgb(0.035, 0.035, 0.035)); c.fill(CGRect(x: 0, y: 0, width: w, height: h))
+    let tile = CGRect(x: w * 0.05, y: h * 0.08, width: w * 0.9, height: h * 0.84)
+    c.saveGState()
+    c.addPath(CGPath(roundedRect: tile, cornerWidth: h * 0.1, cornerHeight: h * 0.1, transform: nil)); c.clip()
+    c.setFillColor(amazonTile); c.fill(tile)
+    c.translateBy(x: tile.midX - tile.height / 2, y: tile.minY)
+    iconDraw(c, tile.height)
+    c.restoreGState()
+}
+
+if let mock = ProcessInfo.processInfo.environment["MOCK"] {
+    save(render(680, 360) { c in amazonTileMock(c, 680, 360) { icon($0, $1) } }, mock + "-A.png")
+    save(render(680, 360) { c in amazonTileMock(c, 680, 360) { iconFire($0, $1) } }, mock + "-B.png")
+    exit(0)
+}
+
 // prévia grande (opcional)
 if CommandLine.arguments.count > 1 {
     save(render(1024, 1024) { icon($0, 1024) }, CommandLine.arguments[1])
 }
 
-// ícone 192x192
-save(render(192, 192) { icon($0, 192) }, "res/drawable-xxxhdpi/icon.png")
+// ícone 192x192. Na versão Fire TV usa o ícone com fundo cinza da Amazon (iconFire),
+// porque a tela da Amazon mostra o ícone no meio de um quadro cinza; no Google TV,
+// o ícone claro (a tela inicial do Google usa o banner).
+let isFire = FileManager.default.currentDirectoryPath.contains("versao-fire")
+save(render(192, 192) { isFire ? iconFire($0, 192) : icon($0, 192) }, "res/drawable-xxxhdpi/rinostick_icon.png")
 
 // banner 640x360: o nome numa linha, dentro da cápsula de vidro
 save(render(640, 360) { c in
@@ -166,4 +202,4 @@ save(render(640, 360) { c in
     let pill = CGRect(x: (w - tw) / 2 - padX, y: (h - ph) / 2, width: tw + padX * 2, height: ph)
     glass(c, pill, radius: ph / 2)
     draw(c, l, centerX: w / 2, baseline: h / 2 + 28)
-}, "res/drawable-xhdpi/banner.png")
+}, "res/drawable-xhdpi/rinostick_banner.png")
