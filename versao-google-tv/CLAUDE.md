@@ -26,7 +26,7 @@
 
 **Ao mudar algo comum às duas versões** (grade, cartão de música, clima, visual), faça a mesma mudança nas duas pastas.
 
-**Testado no emulador de Google TV 14** (`~/.android/avd/rinotv`, imagem `system-images;android-34;google-tv;arm64-v8a`; ligar com `$ANDROID_HOME/emulator/emulator -avd rinotv`, depois `adb -s emulator-5554 tcpip 5555` para simular a Depuração USB): assistente sem computador (aviso "Permitir depuração" → 3 permissões → "Tudo pronto"), botão Home (launcherx `.home.HomeActivity` → RinoStick), protetor Aurora, painel de Ajustes, segurar OK, Tela do Google (pausa funciona).
+**Testado no emulador de Google TV 14** (já apagado do Mac, a pedido do usuário; para recriar: `sdkmanager "emulator" "system-images;android-34;google-tv;arm64-v8a"`, criar o AVD com `hw.dPad=yes`, `hw.lcd.width=1920`, `hw.lcd.height=1080` e, depois de ligar, `adb -s emulator-5554 tcpip 5555` para simular a Depuração USB): assistente sem computador (aviso "Permitir depuração" → 3 permissões → "Tudo pronto"), botão Home (launcherx `.home.HomeActivity` → RinoStick), protetor Aurora, painel de Ajustes, segurar OK, Tela do Google (pausa funciona).
 
 **Numa TV física, confira também:** o botão Home redireciona (se não, veja a classe com `adb shell dumpsys activity activities | grep mResumedActivity` e ajuste `onAccessibilityEvent`); o protetor de tela troca (`settings get secure screensaver_components`); o assistente conecta na 5555; nenhum app de sistema estranho aparece na grade (ocultar ou filtrar em `loadAll`).
 
