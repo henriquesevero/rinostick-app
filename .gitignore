@@ -1,0 +1,17 @@
+# Gerado pela compilação
+build/
+*.apk
+*.dex
+*.class
+
+# Chave de assinatura — NUNCA versionar (guarde uma cópia segura fora do git)
+*.keystore
+*.jks
+dist/chave/
+
+# Valores de aparelhos (backups da limpeza)
+backup/
+dist/backups/
+
+# macOS
+.DS_Store

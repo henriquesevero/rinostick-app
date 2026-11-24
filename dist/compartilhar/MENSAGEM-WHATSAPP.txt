@@ -1,0 +1,15 @@
+Oi! Segue o RinoStick, uma tela inicial para o Fire TV no estilo Apple TV e sem anúncios 📺 Dá pra fazer tudo pelo controle:
+
+1) Configurações → Minha Fire TV → Sobre → aperta OK 7 vezes no nome do aparelho. Volta, entra em "Opções do desenvolvedor" e liga a "Depuração ADB".
+
+2) Instala o app "Downloader" (o laranja) na loja da Amazon. Depois, em Opções do desenvolvedor → "Instalar apps desconhecidos", liga o Downloader.
+
+3) Abre o Downloader, digita este link e aperta Go:
+https://github.com/henriquesevero/rinostick-app/releases/latest/download/RinoStick.apk
+Depois: Instalar → Abrir (e pode apagar o arquivo baixado).
+
+4) O app vai pedir pra configurar: escolhe "Configurar e remover anúncios". Quando aparecer "Permitir depuração?" na TV, marca "Sempre permitir" e confirma.
+
+5) Apareceu "Tudo pronto"? Aperta o Home e pronto 😉
+
+Se travar em algum passo, me manda foto da tela!
