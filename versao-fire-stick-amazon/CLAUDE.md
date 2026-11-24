@@ -122,7 +122,8 @@ O `build.sh install` e os instaladores do kit (`dist/kit-de-instalacao/instalar-
   - `<queries>` para LEANBACK_LAUNCHER, LAUNCHER e HOME.
   - Serviços: Screensaver, NowPlayingListener, HomeRedirectService.
 - `tools/make_sfx.py`: gera o `res/raw/tick.wav` (estalo de madeira sintetizado).
-- `res/`: `styles.xml` (AppTheme, OverlayTheme), `xml/accessibility.xml`, `raw/tick.wav` (o único som), `drawable/icon.xml` e `banner.xml` (ainda genéricos).
+- `res/`: `styles.xml` (AppTheme, OverlayTheme), `xml/accessibility.xml`, `raw/tick.wav` (o único som), `drawable-xxxhdpi/icon.png` (192 px) e `drawable-xhdpi/banner.png` (640×360), gerados por `tools/make_icons.swift` (rodar `swift tools/make_icons.swift` na pasta da versão).
+- `tools/make_icons.swift`: desenha o ícone e o banner. **Visual aprovado (v1.4): tema `apple`** — só o nome, "Rino" em quase preto (#1D1D1F) e "Stick" em cinza (#86868B), dentro de uma cápsula de vidro fosco branco (estilo Liquid Glass) sobre fundo de alumínio claro. Ícone com o nome em duas linhas; banner em uma linha. Monocromático. Rejeitados: rinoceronte desenhado (simples e detalhado), tema azul/laranja e tema Golden Gate (guardados no script como `knicks` e `goldengate`).
 - `assets/fonts/`: Inter (Light, Regular, Medium, SemiBold, Bold), licença OFL. É o substituto do San Francisco.
 
 ---
@@ -232,5 +233,4 @@ O aparelho original (o primeiro) tem os backups em `backup/` (fora do git).
 - Ideias sugeridas e ainda não feitas:
   - Capa do álbum desfocada no fundo enquanto toca música.
   - Protetor de tela mostrando a música.
-  - Ícone/banner próprio do "RinoStick".
   - Cards melhores para apps sem banner de TV.
