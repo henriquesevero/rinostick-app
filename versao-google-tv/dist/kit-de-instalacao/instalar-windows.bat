@@ -91,6 +91,9 @@ echo - Liberando as permissoes...
 "%ADB%" -s %T% shell pm grant %PKG% android.permission.WRITE_SECURE_SETTINGS
 "%ADB%" -s %T% shell "s=%PKG%/%PKG%.HomeRedirectService; cur=$(settings get secure enabled_accessibility_services); case \"$cur\" in *$s*) ;; null|'') settings put secure enabled_accessibility_services $s ;; *) settings put secure enabled_accessibility_services \"$cur:$s\" ;; esac; settings put secure accessibility_enabled 1"
 "%ADB%" -s %T% shell cmd notification allow_listener %PKG%/%PKG%.NowPlayingListener >nul 2>&1
+REM Fire OS / Android antigo (ex.: Fire OS 6): confere e, se faltar, grava direto no banco de ajustes
+call :fixsecure enabled_accessibility_services %PKG%/%PKG%.HomeRedirectService
+call :fixsecure enabled_notification_listeners %PKG%/%PKG%.NowPlayingListener
 
 echo - Abrindo o RinoStick...
 "%ADB%" -s %T% shell am start -n %PKG%/.MainActivity >nul 2>&1
@@ -110,3 +113,13 @@ echo O RinoStick continua funcionando.
 "%ADB%" kill-server >nul 2>&1
 echo.
 pause
+exit /b 0
+
+:fixsecure
+set "CUR="
+for /f "delims=" %%v in ('call "%ADB%" -s %T% shell settings get secure %1') do set "CUR=%%v"
+echo %CUR% | find "%~2" >nul && exit /b 0
+set "NEW=%~2"
+echo %CUR% | find "/" >nul && set "NEW=%CUR%:%~2"
+"%ADB%" -s %T% shell content insert --uri content://settings/secure --bind name:s:%1 --bind value:s:%NEW%
+exit /b 0

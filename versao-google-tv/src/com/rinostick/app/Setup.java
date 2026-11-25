@@ -31,6 +31,13 @@ final class Setup {
         return ip != null ? "IP desta TV: " + ip : "IP desta TV: Configurações → Rede e Internet";
     }
 
+    /** Comando de shell: se `v` não estiver em `k`, grava direto no banco de ajustes (content insert). */
+    static String fixSecure(String k, String v) {
+        String ins = "content insert --uri content://settings/secure --bind name:s:" + k + " --bind value:s:";
+        return "cur=$(settings get secure " + k + "); case \"$cur\" in *" + v + "*) ;; null|'') " + ins + v
+                + " ;; *) " + ins + "\"$cur:" + v + "\" ;; esac";
+    }
+
     static boolean asked; // pergunta automática só uma vez por sessão
 
     private Setup() { }
@@ -91,6 +98,9 @@ final class Setup {
                         + " ;; *) settings put secure enabled_accessibility_services \"$cur:" + svc
                         + "\" ;; esac; settings put secure accessibility_enabled 1");
                 adb.shell("cmd notification allow_listener " + PKG + "/" + PKG + ".NowPlayingListener");
+                // Fire OS / Android antigo: "settings put" e "cmd notification" não gravam; confere e grava direto.
+                adb.shell(fixSecure("enabled_accessibility_services", svc));
+                adb.shell(fixSecure("enabled_notification_listeners", PKG + "/" + PKG + ".NowPlayingListener"));
             } catch (Exception e) {
                 err = e.getMessage() != null ? e.getMessage() : "Não foi possível configurar.";
             }

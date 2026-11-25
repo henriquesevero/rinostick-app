@@ -95,6 +95,7 @@ Suas pastas, a ordem dos apps, os ajustes e as permissões continuam como estava
 | O aviso "Permitir depuração" não apareceu | Desligue e ligue a Depuração ADB na TV e rode o instalador de novo |
 | No Mac: "Operation not permitted" ou "Permission denied" | Confira se digitou `bash` e um espaço antes de arrastar o arquivo |
 | No Windows: a janela abre e fecha na hora | Extraia o zip antes (Parte 2) e rode o `instalar-windows.bat` da pasta extraída |
+| Fire TV mais antigo (Fire OS 6, como o Fire TV Stick 4K de 2018): o botão Home sempre abre a tela da Amazon | Nesse sistema a Amazon não deixa trocar a tela inicial. O resto funciona: abra o RinoStick pelo ícone dele (dica: segure OK no ícone e mova para o primeiro lugar da fileira). Para ver a versão: Configurações → Minha Fire TV → Sobre |
 | O botão Home voltou para a tela da Amazon (pode acontecer após atualizações do Fire TV) | Ligue a Depuração ADB e rode o instalador de novo. Seus ajustes continuam |
 | Anúncios ou apps da Amazon voltaram | Rode o instalador de novo e responda `s` na última pergunta |
 
