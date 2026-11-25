@@ -80,18 +80,6 @@ SVC="$PKG/$PKG.HomeRedirectService"
 A shell "cur=\$(settings get secure enabled_accessibility_services); case \"\$cur\" in *$SVC*) ;; null|'') settings put secure enabled_accessibility_services $SVC ;; *) settings put secure enabled_accessibility_services \"\$cur:$SVC\" ;; esac; settings put secure accessibility_enabled 1"
 A shell cmd notification allow_listener "$PKG/$PKG.NowPlayingListener" >/dev/null 2>&1
 
-# Fire OS / Android antigo (ex.: Fire OS 6): "settings put" e "cmd notification" não gravam.
-# Confere cada permissão e, se faltar, grava direto no banco de ajustes.
-fix_secure() {
-    local cur new
-    cur="$(A shell settings get secure "$1" | tr -d '\r')"
-    [[ "$cur" == *"$2"* ]] && return
-    if [ -z "$cur" ] || [ "$cur" = "null" ]; then new="$2"; else new="$cur:$2"; fi
-    A shell content insert --uri content://settings/secure --bind "name:s:$1" --bind "value:s:$new"
-}
-fix_secure enabled_accessibility_services "$SVC"
-fix_secure enabled_notification_listeners "$PKG/$PKG.NowPlayingListener"
-
 echo "→ Abrindo o RinoStick…"
 A shell am start -n "$PKG/.MainActivity" >/dev/null 2>&1
 sleep 3
