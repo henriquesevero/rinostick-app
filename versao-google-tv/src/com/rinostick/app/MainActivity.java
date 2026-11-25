@@ -57,7 +57,7 @@ import java.util.Set;
 
 public class MainActivity extends Activity {
 
-    static final int COLS = 6;
+    static final int COLS = 5;
     static final String SETTINGS = "__settings__";
     static final String FOLDER = "f:";
     static final int MATCH = Ui.MATCH, WRAP = Ui.WRAP;
@@ -184,9 +184,9 @@ public class MainActivity extends Activity {
         if (!prefs.contains("hidden")) prefs.edit().putStringSet("hidden", DEFAULT_HIDDEN).apply();
         Device.initScreensaver(this);
 
-        gap = (int) px(36);
+        gap = (int) px(42);
         rowGap = (int) px(44);
-        tileW = (int) px(256);
+        tileW = (int) px(308);
         tileH = tileW * 9 / 16;
         side = (Ui.W - (COLS * tileW + (COLS - 1) * gap)) / 2; // grade centralizada
         shelfH = (int) (Ui.H * 0.55f);  // topo da grade quando há poucas linhas

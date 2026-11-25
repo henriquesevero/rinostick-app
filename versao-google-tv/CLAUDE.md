@@ -36,7 +36,7 @@
 
 Tela inicial (launcher) minimalista no estilo **Apple TV / tvOS** para **Google TV e Android TV** (compilada para API 30, roda a partir do Android 7.1 / API 25).
 
-- Sem as fileiras de recomendações: mostra só os apps instalados, numa grade de **6 por linha**.
+- Sem as fileiras de recomendações: mostra só os apps instalados, numa grade de **5 por linha** (ícones de 308 px, como no Apple TV; até a v1.5 eram 6 de 256 px).
 - A primeira fileira fica dentro de um "dock" de vidro.
 - Fundo com a cor desfocada do app em foco.
 - Saudação com o nome escolhido em Ajustes, relógio, data e clima.
@@ -101,7 +101,7 @@ O `build.sh install` e os instaladores do kit (`dist/kit-de-instalacao/instalar-
 Ícones disponíveis em `Glyph.java`: GEAR, POWER, APPEARANCE, SPEAKER, WIFI, BAG, TV, EYE, SORT, RESTORE, CLOSE, PLAY, PAUSE, NEXT, XMARK, SUN, MOON, CLOUD, PARTLY, RAIN, STORM, FOG.
 
 **`MainActivity.java`**
-- Grade `COLS = 6`, com o card do app = banner da TV (ou gradiente + ícone).
+- Grade `COLS = 5` (`tileW` 308, `gap` 42; aprovado na v1.6), com o card do app = banner da TV (ou gradiente + ícone).
 - Pastas guardadas em JSON em `prefs "folders"`; ordem em `"order"`; ocultos em `"hidden"`. `DEFAULT_HIDDEN` vazio. `DEFAULT_ORDER`: Apple TV, Netflix, Prime Video, YouTube, Spotify.
 - Foco: escala 1.07 + leve inclinação + brilho. Rolagem própria (`GridScroll`).
 - Fileiras: a tela inicial mostra só o dock + a 2ª fileira; a 3ª em diante fica apagada (alpha 0.25) como dica. Ao focar a 3ª fileira ou abaixo, entra no modo "só apps" (`setAppsOnly`): o topo (`header`), o fundo colorido e o dock somem, e a grade sobe. Voltar à 1ª/2ª fileira desfaz tudo.
@@ -203,7 +203,7 @@ Veja `dist/LEIA-ME.md` (inclusive "Depuração sem fio") e `dist/kit-de-instalac
 - **Fidelidade ao Apple TV**, minimalista, limpo e "profissional".
 - **Sem nomes** de apps abaixo ou acima dos ícones; nada de texto ao focar.
 - Ícones **padronizados**, com foco discreto (escala 1.07).
-- Grade de 6 por linha; a tela inicial mostra **2 fileiras**; descendo, o topo some e fica só a grade (estilo tvOS). Carrossel foi testado e rejeitado.
+- Grade de **5 por linha**, ícones grandes (pedido do usuário na v1.6, inspirado no Apple TV); a tela inicial mostra **2 fileiras**; descendo, o topo some e fica só a grade (estilo tvOS). Carrossel foi testado e rejeitado.
 - Topo:
   - Engrenagem discreta à **esquerda**, com a saudação ao lado.
   - Relógio à **direita**, com a data e o clima abaixo.
